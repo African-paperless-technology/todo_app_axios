@@ -1,0 +1,22 @@
+{
+  "contacts": [
+    {
+      "id": "Y5Z",
+      "name": "Dylan",
+      "email": "dylan@gmail.com",
+      "telephone": "221 3293939442"
+    },
+    {
+      "id": "d40d10dc-1c3d-482e-8762-07aa7018857b",
+      "names": "rv",
+      "emails": "rv@gmail.com",
+      "telephones": "034321134"
+    },
+    {
+      "id": "793a9d27-a08b-4571-9a59-02ed6d9ea6e2",
+      "names": "dani",
+      "emails": "dani@gmail.com",
+      "telephones": "056532213"
+    }
+  ]
+}
