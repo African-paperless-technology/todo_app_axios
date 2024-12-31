@@ -7,7 +7,7 @@ const AddContact = ({ addContact, onClose }) => {
   const [telephone, setTelephone] = useState("");
 
   const newContact = {
-    id: crypto.randomUUID(),
+    id: crypto.randomUUID,
     names: name,
     emails: email,
     telephones: telephone,

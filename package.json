@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "json-server -p 3006 -w db.json",
+    "server": "json-server --watch db.json --port 3006 --cors",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "proxy": "http://localhost:3006",
   "dependencies": {
     "axios": "^1.7.8",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
     "lucide-react": "^0.456.0",
     "nanoid": "^5.0.8",
     "react": "^18.3.1",

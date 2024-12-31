@@ -6,26 +6,27 @@ import Modal from "../../components/Modal/Modal";
 import { Pencil } from "lucide-react";
 
 const ListContact = ({ searchTerm }) => {
-  const { contacts } = useContext(ContactContext);
+  const { contacts, removeContact } = useContext(ContactContext);
   const [selectedPerson, setSelectedPerson] = useState(null);
 
   const handleCloseModal = () => {
     setSelectedPerson(null);
   };
 
+
+
   return (
     <>
-      {contacts == null ||
-      (Array.isArray(contacts) && contacts.length === 0) ? (
+      {contacts == null || !Array.isArray(contacts) ? (
         <p className="bg-gray-100 shadow-md rounded-lg p-4 text-center font-semibold">
           AUCUNE DONNEE 😵😵
         </p>
       ) : (
         <ul className="bg-gray-100 shadow-md rounded-lg p-4">
           {contacts
-            .filter((person) => person && person.name)
+            .filter((person) => person && person.names)
             .filter((person) =>
-              person.name.toLowerCase().includes(searchTerm.toLowerCase())
+              person.names.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((person) => (
               <li
@@ -38,7 +39,7 @@ const ListContact = ({ searchTerm }) => {
                   className="w-10 h-10 rounded-full mr-4"
                   alt="Utilisateur"
                 />
-                <span className="flex-grow text-gray-800">{person.name}</span>
+                <span className="flex-grow text-gray-800">{person.names}</span>
 
                 <Pencil className="pr-1 mr-3" />
                 <img
@@ -46,7 +47,7 @@ const ListContact = ({ searchTerm }) => {
                   className="w-8 h-8 rounded-full text-gray-600 hover:text-red-500 cursor-pointer transition duration-200 ease-in-out"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // removeContact(person.id);
+                     removeContact(person.id);
                   }}
                   alt="Supprimer"
                 />

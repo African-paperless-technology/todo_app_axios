@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { createContact, deleteContact, getContact } from "../service/AxiosConfig";
+import { createContact, removeContact, getContact } from "../service/AxiosConfig";
 
 export const ContactContext = createContext();
 
@@ -31,6 +31,9 @@ function ContactProvider(props) {
         console.error("ID is undefined or null");
         return;
       }
+      await contacts.delete(`/contacts/${id}`);
+      const newContact = contacts.filter((contact) => contact.id !== id);
+      setContacts(newContact);
     } catch (error) {
       console.error("Error removing contact:", error);
     }
@@ -38,7 +41,7 @@ function ContactProvider(props) {
 
 
   return (
-    <ContactContext.Provider value={{ contacts, addContact, getAllContacts, deleteContact }}>
+    <ContactContext.Provider value={{ contacts, addContact, getAllContacts, removeContact }}>
       {props.children}
     </ContactContext.Provider>
   );

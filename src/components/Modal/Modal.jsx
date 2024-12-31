@@ -11,10 +11,10 @@ const Modal = ({ person, onClose }) => {
           className="w-10 h-10 rounded-full mr-4"
           alt="Utilisateur"
         />
-        <span className="text-2xl font-bold">{person.name}</span>
+        <span className="text-2xl font-bold">{person.names}</span>
 
-        <p className="text-gray-700">Adresse mail: {person.email}</p>
-        <p className="text-gray-700">Numéro de téléphone: {person.telephone}</p>
+        <p className="text-gray-700">Adresse mail: {person.emails}</p>
+        <p className="text-gray-700">Numéro de téléphone: {person.telephones}</p>
         <button
           onClick={onClose}
           className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
