@@ -18,7 +18,10 @@ pipeline {
             steps {
                 script {
                     // Build et démarre les conteneurs
-                    sh 'docker-compose up -d --build'
+                    sh '''
+                        npm install
+                        docker-compose up -d --build
+                    '''
                 }
             }
             post {
