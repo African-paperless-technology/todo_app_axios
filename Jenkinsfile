@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-      nodejs 'nodejs'
+        nodejs 'nodejs'
     }
     
     environment {
@@ -14,10 +14,10 @@ pipeline {
     }
     
     stages {
-        stage('Build Application') {
+        stage('Construire l\'application') {
             steps {
                 script {
-                    // Build et démarre les conteneurs
+                    // Installer les dépendances et démarrer les conteneurs
                     sh '''
                         npm install
                         docker-compose up -d --build
@@ -26,15 +26,15 @@ pipeline {
             }
             post {
                 success {
-                    echo '✅ Docker build successful'
+                    echo '✅ Construction Docker réussie'
                 }
                 failure {
-                    echo '❌ Docker build failed'
+                    echo '❌ Échec de la construction Docker'
                 }
             }
         }
 
-        stage('Install Trivy') {
+        stage('Installer Trivy') {
             steps {
                 sh '''
                     curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.48.1
@@ -43,10 +43,10 @@ pipeline {
             }
         }
         
-        stage('Security Scan') {
+        stage('Analyse de sécurité') {
             steps {
                 script {
-                    // Génère un rapport détaillé
+                    // Générer un rapport détaillé
                     sh """
                         trivy image \
                             --exit-code 1 \
@@ -59,24 +59,24 @@ pipeline {
             }
             post {
                 success {
-                    echo '✅ Security scan passed - No critical vulnerabilities found'
+                    echo '✅ L\'analyse de sécurité a réussi - Aucune vulnérabilité critique trouvée'
                     archiveArtifacts 'trivy-report.txt'
                 }
                 failure {
-                    echo '❌ Security scan failed - Critical vulnerabilities detected!'
+                    echo '❌ Échec de l\'analyse de sécurité - Vulnérabilités critiques détectées !'
                     archiveArtifacts 'trivy-report.txt'
                     slackSend(
                         color: 'danger',
                         message: """
-                            🚨 Security vulnerabilities detected in ${DOCKER_IMAGE}:${DOCKER_TAG}
-                            Check detailed report: ${env.BUILD_URL}artifact/trivy-report.txt
+                            🚨 Vulnérabilités de sécurité détectées dans ${DOCKER_IMAGE}:${DOCKER_TAG}
+                            Consultez le rapport détaillé : ${env.BUILD_URL}artifact/trivy-report.txt
                         """
                     )
                 }
             }
         }
         
-        stage('Run Tests') {
+        stage('Exécuter les tests') {
             steps {
                 script {
                     sh 'docker-compose exec -T frontend npm test -- --watchAll=false'
@@ -84,15 +84,15 @@ pipeline {
             }
             post {
                 success {
-                    echo '✅ Tests passed'
+                    echo '✅ Les tests ont réussi'
                 }
                 failure {
-                    echo '❌ Tests failed'
+                    echo '❌ Les tests ont échoué'
                 }
             }
         }
 
-        stage('Build for Netlify') {
+        stage('Construire pour Netlify') {
             steps {
                 nodejs(NODEJS_VERSION) {
                     sh '''
@@ -103,20 +103,20 @@ pipeline {
             }
             post {
                 success {
-                    echo '✅ Build successful'
+                    echo '✅ Construction réussie'
                 }
                 failure {
-                    echo '❌ Build failed'
+                    echo '❌ Échec de la construction'
                 }
             }
         }
         
-        stage('Deploy to Production') {
+        stage('Déployer en production') {
             when {
                 branch 'main'
             }
             steps {
-                input '🚀 Deploy to production?'
+                input '🚀 Déployer en production ?'
                 
                 script {
                     sh """
@@ -125,7 +125,7 @@ pipeline {
                             --auth=\${NETLIFY_AUTH_TOKEN} \
                             --site=\${NETLIFY_SITE_ID} \
                             --prod \
-                            --message="Production deployment from Jenkins #${env.BUILD_NUMBER}"
+                            --message="Déploiement en production depuis Jenkins #${env.BUILD_NUMBER}"
                     """
                 }
             }
@@ -134,9 +134,9 @@ pipeline {
                     slackSend(
                         color: 'good',
                         message: """
-                            ✅ Deployment successful!
-                            🔗 Application: https://your-app.netlify.app
-                            📦 Version: ${env.BUILD_NUMBER}
+                            ✅ Déploiement réussi !
+                            🔗 Application : https://your-app.netlify.app
+                            📦 Version : ${env.BUILD_NUMBER}
                         """
                     )
                 }
@@ -144,9 +144,9 @@ pipeline {
                     slackSend(
                         color: 'danger',
                         message: """
-                            ❌ Deployment failed!
-                            🏗️ Build: ${env.BUILD_NUMBER}
-                            🔍 Check logs: ${env.BUILD_URL}console
+                            ❌ Échec du déploiement !
+                            🏗️ Build : ${env.BUILD_NUMBER}
+                            🔍 Vérifiez les logs : ${env.BUILD_URL}console
                         """
                     )
                 }
@@ -157,14 +157,7 @@ pipeline {
     post {
         always {
             // Nettoyage
-            sh 'docker-compose down --rmi all -v'
-            cleanWs()
-        }
-        success {
-            echo '✅ Pipeline completed successfully!'
-        }
-        failure {
-            echo '❌ Pipeline failed!'
+            sh 'docker-compose down --rmi all'
         }
     }
 }
