@@ -12,8 +12,17 @@ pipeline {
         NODEJS_VERSION = '18.x'
         TRIVY_SEVERITY = 'HIGH,CRITICAL'
     }
+
+    
     
     stages {
+
+        stage('Étape 1') {
+            steps {
+                echo '✅ Début de l\'étape 1'
+            }
+        }
+        
         stage('Construire l\'application') {
             steps {
                 script {
