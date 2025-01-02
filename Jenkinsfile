@@ -101,9 +101,11 @@ pipeline {
     
     post {
         always {
-            echo '🔄 Nettoyage final...'
-            sh 'docker-compose down --rmi all -v'
-            cleanWs()
+            node {
+                echo '🔄 Nettoyage final...'
+                sh 'docker-compose down --rmi all -v'
+                cleanWs()
+            }
         }
         success {
             echo '✅ Pipeline terminé avec succès !'
