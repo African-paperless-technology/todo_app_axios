@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                 sh 'npm install'
             }
         }
 
@@ -18,10 +18,15 @@ pipeline {
             steps {
                 script {
                     echo '📦 Installation des dépendances...'
-                    nodejs(NODEJS_VERSION) {
-                        sh 'npm ci'
+                     try {
+                        nodejs(NODEJS_VERSION) {
+                            sh 'npm ci'
+                        }
+                        echo '✅ Dépendances installées'
+                    } catch (err) {
+                        echo "❌ Erreur lors de l'installation des dépendances: $err"
+                        throw err
                     }
-                    echo '✅ Dépendances installées'
                 }
             }
         }
