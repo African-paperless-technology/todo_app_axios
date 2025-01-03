@@ -36,6 +36,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Install Trivy') {
+            steps {
+                bat '''
+                    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.48.1
+                    trivy --version
+                '''
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                script {
+                    // Génère un rapport détaillé
+                    bat """
+                        trivy image \
+                            --exit-code 1 \
+                            --severity \${TRIVY_SEVERITY} \
+                            --format table \
+                            --output trivy-report.txt \
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    """
+                }
+            }
     }
     post {
         always {
