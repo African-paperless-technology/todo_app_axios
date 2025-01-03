@@ -20,11 +20,7 @@ pipeline {
                     echo '📦 Installation des dépendances...'
                     try {
                         nodejs(NODEJS_VERSION) {
-                            if (isUnix()) {
-                                sh 'setsid npm ci'
-                            } else {
-                                bat 'start npm ci'
-                            }
+                            sh 'npm ci'
                         }
                         echo '✅ Dépendances installées'
                     } catch (err) {
@@ -36,6 +32,7 @@ pipeline {
         }
 
         // Reste du pipeline
+
     }
 
     post {
