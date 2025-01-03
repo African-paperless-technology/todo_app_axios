@@ -4,9 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'todo-app'
         DOCKER_TAG = 'v1.0.0'
-        NETLIFY_AUTH_TOKEN = credentials('netlify-auth-token')
-        NETLIFY_SITE_ID = credentials('netlify-site-id')
-        NODEJS_VERSION = '18.x'
         TRIVY_SEVERITY = 'HIGH,CRITICAL'
     }
     
@@ -58,53 +55,6 @@ pipeline {
                     sh 'docker-compose exec -T frontend npm test -- --watchAll=false'
                     echo '✅ Tests exécutés avec succès'
                 }
-            }
-        }
-
-        stage('Construire pour Netlify') {
-            steps {
-                script {
-                    echo '📦 Construction pour Netlify...'
-                    nodejs(NODEJS_VERSION) {
-                        sh '''
-                            export VITE_APP_API_URL=https://api.yourapp.com
-                            npm run build
-                        '''
-                    }
-                    echo '✅ Construction réussie pour Netlify'
-                }
-            }
-        }
-        
-        stage('Déployer en production') {
-            when {
-                branch 'main'
-            }
-            steps {
-                input '🚀 Déployer en production ?'
-                
-                script {
-                    echo '🚀 Démarrage du déploiement en production...'
-                    sh """
-                        npx netlify-cli deploy \
-                            --dir=dist \
-                            --auth=\${NETLIFY_AUTH_TOKEN} \
-                            --site=\${NETLIFY_SITE_ID} \
-                            --prod \
-                            --message="Déploiement en production depuis Jenkins #${env.BUILD_NUMBER}"
-                    """
-                    echo '✅ Déploiement en production réussi'
-                }
-            }
-        }
-    }
-    
-    post {
-        always {
-            node {
-                echo '🔄 Nettoyage final...'
-                sh 'docker-compose down --rmi all -v'
-                cleanWs()
             }
         }
         success {
