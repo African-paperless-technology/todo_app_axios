@@ -1,9 +1,5 @@
 pipeline {
-   agent {
-        node {
-            label 'nodejs'
-        }
-    }
+   agent any
     
     environment {
         DOCKER_IMAGE = 'todo-app'
