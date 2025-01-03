@@ -14,7 +14,6 @@ pipeline {
                     echo '📦 Installation des dépendances...'
                     try {
                             sh 'npm install'
-                        }
                         echo '✅ Dépendances installées'
                     } catch (err) {
                         echo "❌ Erreur lors de l'installation des dépendances: $err"
@@ -22,6 +21,7 @@ pipeline {
                     }
                 }
             }
+        }
         stage('Build Application') {
             steps {
                 script {
