@@ -3,6 +3,11 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
+        STG_API_ENDPOINT = 'http://localhost:2793'
+        APP_NAME = 'my-react-app'
+        CONTAINER_IMAGE = 'my-react-app:v1.0.0'
+        EXTERNAL_PORT = '80'
+        INTERNAL_PORT = '3000'
     }
     stages {
         stage('Install Dependencies') {
@@ -35,15 +40,31 @@ pipeline {
                     echo '❌ Docker build failed'
                 }
             }
-        }     
-        
-        stage('Security Scan') {
+        } 
+
+        stage('clean all containers') {
             steps {
                 script {
-                    // Génère un rapport détaillé
-                    bat """
-                        wget https://github.com/aquasecurity/trivy/releases/download/v0.41.0/trivy_0.41.0_Linux-64bit.deb
-                        dpkg -i trivy_0.41.0_Linux-64bit.deb
+                    bat 'docker-compose down'
+                }
+            }
+            post {
+                success {
+                    echo '✅ Container deleted successful'
+                }
+                failure {
+                    echo '❌ Container delete failed'
+                }
+            }
+        } 
+        
+        stage('STAGING - Deploy App') {
+            agent any
+            steps {
+                script {
+                    sh """
+                      echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
+                      curl -X POST http://${STG_API_ENDPOINT}/staging -H 'Content-Type: application/json'  --data-binary @data.json 
                     """
                 }
             }
