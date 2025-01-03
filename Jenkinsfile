@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent docker
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
@@ -42,9 +42,9 @@ pipeline {
                 script {
                     try{
           // Utiliser cmd /c pour exécuter les commandes Windows
-          cmd '/c curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.48.1'
+          bat 'curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.48.1'
          // Vérifier l'installation
-          cmd '/c trivy --version'
+          bat 'trivy --version'
                     }catch(error){
                         echo "❌ Erreur lors de l'installation de trivy: ${error}"
                         throw err
