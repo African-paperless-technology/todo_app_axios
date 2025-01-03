@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKER_IMAGE = 'todo-app'
-        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        DOCKER_TAG = 'v1.0.0'
         NETLIFY_AUTH_TOKEN = credentials('netlify-auth-token')
         NETLIFY_SITE_ID = credentials('netlify-site-id')
         NODEJS_VERSION = '18.x'
