@@ -1,27 +1,22 @@
 pipeline {
-    agent none
+    agent any
 
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
-        NODEJS_VERSION = '18.x'
+        NODEJS_VERSION = '18'
     }
 
     stages {
-        stage('Checkout') {
-            agent any
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Install Dependencies') {
-            agent any
             steps {
                 script {
                     echo '📦 Installation des dépendances...'
                     nodejs(NODEJS_VERSION) {
-                        sh 'npm ci'
+                        sh '''
+                              npm install
+                              npm ci
+                           '''
                     }
                     echo '✅ Dépendances installées'
                 }
@@ -29,7 +24,6 @@ pipeline {
         }
 
         stage('Lint') {
-            agent any
             steps {
                 script {
                     echo '🔍 Exécution des tests de lint...'
@@ -42,7 +36,6 @@ pipeline {
         }
 
         stage('Test') {
-            agent any
             steps {
                 script {
                     echo '🧪 Exécution des tests unitaires...'
@@ -55,7 +48,6 @@ pipeline {
         }
 
         stage('Build') {
-            agent any
             steps {
                 script {
                     echo '📦 Construction de l\'application...'
@@ -68,7 +60,6 @@ pipeline {
         }
 
         stage('Docker Build & Push') {
-            agent any
             steps {
                 script {
                     echo '🐳 Construction de l\'image Docker...'
