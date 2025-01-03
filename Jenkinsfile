@@ -1,22 +1,20 @@
 pipeline {
     agent any
-
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
     }
-
     stages {
-
         stage('Install Dependencies') {
             steps {
                 script {
                     echo '📦 Installation des dépendances...'
                     try {
-                            sh 'npm install'
+                        // Utilisation de bat pour Windows au lieu de sh
+                        bat 'npm install'
                         echo '✅ Dépendances installées'
                     } catch (err) {
-                        echo "❌ Erreur lors de l'installation des dépendances: $err"
+                        echo "❌ Erreur lors de l'installation des dépendances: ${err}"
                         throw err
                     }
                 }
@@ -25,8 +23,8 @@ pipeline {
         stage('Build Application') {
             steps {
                 script {
-                    // Build et démarre les conteneurs
-                    sh 'docker-compose up -d --build'
+                    // Utilisation de bat pour Windows
+                    bat 'docker-compose up -d --build'
                 }
             }
             post {
@@ -38,12 +36,7 @@ pipeline {
                 }
             }
         }
-        }
-
-        // Reste du pipeline
-
     }
-
     post {
         always {
             cleanWs()
@@ -55,3 +48,4 @@ pipeline {
             echo '❌ Échec du pipeline !'
         }
     }
+}
