@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
-        NODEJS_VERSION = '18'
     }
 
     stages {
@@ -12,12 +11,10 @@ pipeline {
             steps {
                 script {
                     echo '📦 Installation des dépendances...'
-                    nodejs(NODEJS_VERSION) {
                         sh '''
                               npm install
                               npm ci
                            '''
-                    }
                     echo '✅ Dépendances installées'
                 }
             }
@@ -27,9 +24,7 @@ pipeline {
             steps {
                 script {
                     echo '🔍 Exécution des tests de lint...'
-                    nodejs(NODEJS_VERSION) {
                         sh 'npm run lint'
-                    }
                     echo '✅ Tests de lint passés'
                 }
             }
@@ -39,7 +34,6 @@ pipeline {
             steps {
                 script {
                     echo '🧪 Exécution des tests unitaires...'
-                    nodejs(NODEJS_VERSION) {
                         sh 'npm test -- --watchAll=false'
                     }
                     echo '✅ Tests unitaires passés'
@@ -51,7 +45,6 @@ pipeline {
             steps {
                 script {
                     echo '📦 Construction de l\'application...'
-                    nodejs(NODEJS_VERSION) {
                         sh 'npm run build'
                     }
                     echo '✅ Construction réussie'
