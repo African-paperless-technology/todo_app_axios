@@ -43,15 +43,16 @@ pipeline {
             try {
                 // Télécharger le binaire Trivy
                 bat 'curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.48.1/trivy_0.48.1_Windows_x86_64.zip'
-                bat 'unzip trivy_0.48.1_Windows_x86_64.zip -d /usr/local/bin'
+                bat 'Expand-Archive -Path trivy_0.48.1_Windows_x86_64.zip -DestinationPath /usr/local/bin'
                 bat 'trivy --version'
             } catch (error) {
                 echo "❌ Erreur lors de l'installation de trivy: ${error}"
-                throw err
+                throw error
             }
         }
     }
 }
+
       
         
         stage('Security Scan') {
