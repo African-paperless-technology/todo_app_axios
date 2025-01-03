@@ -1,5 +1,5 @@
 pipeline {
-   agent any
+   agent none
     
     environment {
         DOCKER_IMAGE = 'todo-app'
@@ -9,6 +9,7 @@ pipeline {
     
     stages {
         stage('Construire l\'application') {
+            agent any
             steps {
                 script {
                     echo '🔨 Démarrage de la construction de l\'application...'
@@ -19,6 +20,7 @@ pipeline {
         }
 
         stage('Installer Trivy') {
+            agent any
             steps {
                 script {
                     echo '🔧 Installation de Trivy...'
