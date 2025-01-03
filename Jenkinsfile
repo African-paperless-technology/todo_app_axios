@@ -60,7 +60,7 @@ pipeline {
                     """
                 }
             }
-    }
+        }
     }
     post {
         always {
@@ -73,3 +73,5 @@ pipeline {
             echo '❌ Échec du pipeline !'
         }
     }
+}
+
