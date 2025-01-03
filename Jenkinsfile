@@ -42,7 +42,7 @@ pipeline {
         script {
             try {
                 // Télécharger le binaire Trivy
-                bat 'npm install -g @aquasecurity/trivy'
+                bat 'npm install trivy'
                 bat 'trivy --version'
             } catch (error) {
                 echo "❌ Erreur lors de l'installation de trivy: ${error}"
