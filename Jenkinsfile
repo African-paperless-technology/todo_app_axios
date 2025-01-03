@@ -42,8 +42,7 @@ pipeline {
         script {
             try {
                 // Télécharger le binaire Trivy
-                bat 'curl -LO https://github.com/aquasecurity/trivy/releases/download/v0.48.1/trivy_0.48.1_Windows_x86_64.zip'
-                bat 'Expand-Archive -Path trivy_0.48.1_Windows_x86_64.zip -DestinationPath /usr/local/bin'
+                bat 'npm install -g @aquasecurity/trivy'
                 bat 'trivy --version'
             } catch (error) {
                 echo "❌ Erreur lors de l'installation de trivy: ${error}"
