@@ -4,23 +4,16 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
-        NODEJS_VERSION = '18.x'
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
 
         stage('Install Dependencies') {
             steps {
                 script {
                     echo '📦 Installation des dépendances...'
                     try {
-                        nodejs(NODEJS_VERSION) {
-                            sh 'npm ci'
+                            sh 'npm install'
                         }
                         echo '✅ Dépendances installées'
                     } catch (err) {
@@ -29,6 +22,22 @@ pipeline {
                     }
                 }
             }
+        stage('Build Application') {
+            steps {
+                script {
+                    // Build et démarre les conteneurs
+                    sh 'docker-compose up -d --build'
+                }
+            }
+            post {
+                success {
+                    echo '✅ Docker build successful'
+                }
+                failure {
+                    echo '❌ Docker build failed'
+                }
+            }
+        }
         }
 
         // Reste du pipeline
