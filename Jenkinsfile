@@ -39,12 +39,12 @@ pipeline {
 
         stage('Install Trivy') {
             steps {
-                bat '''
-                    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | bat -s -- -b /usr/local/bin v0.48.1
-                    trivy --version
-                '''
-            }
-        }
+          // Utiliser cmd /c pour exécuter les commandes Windows
+          cmd '/c curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.48.1'
+         // Vérifier l'installation
+          cmd '/c trivy --version'
+       }
+   }        
         
         stage('Security Scan') {
             steps {
