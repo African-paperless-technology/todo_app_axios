@@ -61,6 +61,7 @@ pipeline {
                 }
             }
     }
+    }
     post {
         always {
             cleanWs()
@@ -72,4 +73,3 @@ pipeline {
             echo '❌ Échec du pipeline !'
         }
     }
-}
