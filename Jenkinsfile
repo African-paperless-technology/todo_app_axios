@@ -35,36 +35,15 @@ pipeline {
                     echo '❌ Docker build failed'
                 }
             }
-        }
-
-        stage('Install Trivy') {
-    steps {
-        script {
-            try {
-                // Télécharger le binaire Trivy
-                bat 'npm install trivy'
-                bat 'trivy --version'
-            } catch (error) {
-                echo "❌ Erreur lors de l'installation de trivy: ${error}"
-                throw error
-            }
-        }
-    }
-}
-
-      
+        }     
         
         stage('Security Scan') {
             steps {
                 script {
                     // Génère un rapport détaillé
                     bat """
-                        trivy image \
-                            --exit-code 1 \
-                            --severity \${TRIVY_SEVERITY} \
-                            --format table \
-                            --output trivy-report.txt \
-                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        wget https://github.com/aquasecurity/trivy/releases/download/v0.41.0/trivy_0.41.0_Linux-64bit.deb
+                        dpkg -i trivy_0.41.0_Linux-64bit.deb
                     """
                 }
             }
