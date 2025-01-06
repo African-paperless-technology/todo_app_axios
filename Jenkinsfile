@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
-        STG_API_ENDPOINT = 'http://localhost:2793'
+        STG_API_ENDPOINT = 'http://localhost:3000'
         APP_NAME = 'my-react-app'
         CONTAINER_IMAGE = 'my-react-app:v1.0.0'
         EXTERNAL_PORT = '80'
@@ -63,7 +63,9 @@ pipeline {
             steps {
                 script {
                     bat """
-                      echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
+                      echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json
+                      npm install --save-dev cors
+                      json-server --watch db.json --port 3000 --middleware ./node_modules/cors
                       curl -X POST http://${STG_API_ENDPOINT}/staging -H 'Content-Type: application/json'  --data-binary @data.json 
                     """
                 }
