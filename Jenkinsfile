@@ -71,6 +71,45 @@ pipeline {
                 }
             }
         }
+
+        stage('Build for Production') {
+            when {
+                branch 'main' // Ne se déclenche que sur la branche main
+            }
+            steps {
+                script {
+                    echo '🏗️ Building for production...'
+                    bat 'npm run build'
+                }
+            }
+        }
+
+        stage('Deploy to Netlify') {
+            when {
+                branch 'main' // Ne se déclenche que sur la branche main
+            }
+            steps {
+                script {
+                    echo '🚀 Deploying to Netlify...'
+                    withCredentials([
+                        string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
+                        string(credentialsId: 'NETLIFY_SITE_ID', variable: 'NETLIFY_SITE_ID')
+                    ]) {
+                        try {
+                            // Déploiement sur Netlify
+                            bat """
+                                netlify deploy --site %NETLIFY_SITE_ID% --auth %NETLIFY_AUTH_TOKEN% --prod --dir build
+                            """
+                            echo '✅ Production deployment successful!'
+                        } catch (err) {
+                            echo "❌ Production deployment failed: ${err}"
+                            throw err
+                        }
+                    }
+                }
+            }
+        }
+
     }
     post {
         always {
