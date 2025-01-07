@@ -70,11 +70,19 @@ pipeline {
                     """
                 }
             }
+            post {
+                success {
+                    echo '✅ Deploy in staging successful'
+                }
+                failure {
+                    echo '❌ Deploy in staging failed'
+                }
+            }
         }
 
         stage('Build for Production') {
             when {
-                branch 'main' // Ne se déclenche que sur la branche main
+                branch 'master' // Ne se déclenche que sur la branche main
             }
             steps {
                 script {
@@ -82,11 +90,19 @@ pipeline {
                     bat 'npm run build'
                 }
             }
+            post {
+                success {
+                    echo '✅ build for production successful'
+                }
+                failure {
+                    echo '❌ build for production failed'
+                }
+            }
         }
 
         stage('Deploy to Netlify') {
             when {
-                branch 'main' // Ne se déclenche que sur la branche main
+                branch 'master' // Ne se déclenche que sur la branche main
             }
             steps {
                 script {
