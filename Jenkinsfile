@@ -88,7 +88,7 @@ pipeline {
                 script {
                     echo '🏗️ Building for production...'
                     bat 'npm run build'
-                    bat 'npm install netlify-cli -g'
+                    bat 'npm install netlify-cli --save-dev'
                 }
             }
             post {
