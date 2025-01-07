@@ -88,13 +88,13 @@ pipeline {
                 script {
                     echo '🏗️ Building for production...'
                     try{
-                    bat 'npm run build'
                     bat 'npm install netlify-cli -g' 
                     } catch (err) {
                         echo '⚠️ Installation globale échouée, utilisation de npx...'
                         bat 'npm install netlify-cli --save-dev'
                         bat 'npx netlify --version'
                         bat 'npx netlify build'
+                        bat 'npm run build'
                     }
                     
                 }
