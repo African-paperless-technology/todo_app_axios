@@ -81,9 +81,9 @@ pipeline {
         }
 
         stage('Build for Production') {
-            when {
-                branch 'master' // Ne se déclenche que sur la branche main
-            }
+            // when {
+            //     branch 'master' // Ne se déclenche que sur la branche main
+            // }
             steps {
                 script {
                     echo '🏗️ Building for production...'
@@ -101,9 +101,9 @@ pipeline {
         }
 
         stage('Deploy to Netlify') {
-            when {
-                branch 'master' // Ne se déclenche que sur la branche main
-            }
+            // when {
+            //     branch 'master' // Ne se déclenche que sur la branche main
+            // }
             steps {
                 script {
                     echo '🚀 Deploying to Netlify...'
