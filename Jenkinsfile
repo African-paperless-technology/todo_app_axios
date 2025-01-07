@@ -94,6 +94,7 @@ pipeline {
                         echo '⚠️ Installation globale échouée, utilisation de npx...'
                         bat 'npm install netlify-cli --save-dev'
                         bat 'npx netlify --version'
+                        bat 'npx netlify build'
                     }
                     
                 }
