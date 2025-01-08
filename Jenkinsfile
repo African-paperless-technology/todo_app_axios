@@ -7,6 +7,8 @@ pipeline {
         APP_NAME = 'my-react-app'
         CONTAINER_IMAGE = 'my-react-app:v1.0.0'
         EXTERNAL_PORT = '80'
+        NETLIFY_AUTH_TOKEN = credentials('NETLIFY_AUTH_TOKEN')
+        NETLIFY_SITE_ID = credentials('NETLIFY_SITE_ID')
     
         INTERNAL_PORT = '3000'
     }
@@ -119,21 +121,19 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying to Netlify...'
-                    withCredentials([
-                        string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
-                        string(credentialsId: 'NETLIFY_SITE_ID', variable: 'NETLIFY_SITE_ID')
-                    ]) {
+                    echo '❌✅${NETLIFY_SITE_ID}'
+                    echo '❌✅${NETLIFY_AUTH_TOKEN}'
                         try {
                             // Déploiement sur Netlify
                             bat """
-                                npx netlify deploy --site %NETLIFY_SITE_ID% --auth %NETLIFY_AUTH_TOKEN% --prod --dir build
+                                npx netlify deploy --site ${NETLIFY_SITE_ID} --auth ${NETLIFY_AUTH_TOKEN} --prod --dir build
                             """
                             echo '✅ Production deployment successful!'
                         } catch (err) {
                             echo "❌ Production deployment failed: ${err}"
                             throw err
                         }
-                    }
+                    
                 }
             }
         }
