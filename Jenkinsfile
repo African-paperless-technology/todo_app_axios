@@ -92,6 +92,7 @@ pipeline {
                     echo '🏗️ Building for production...'
                     try{
                     bat 'npm run build'
+                    bat 'ls -la build'
                     bat 'npm install netlify-cli --save-dev' 
                     bat 'npx netlify build'
                     } catch (err) {
@@ -121,13 +122,11 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying to Netlify...'
-                    echo '❌✅${NETLIFY_SITE_ID}'
-                    echo '❌✅${NETLIFY_AUTH_TOKEN}'
+                    echo "❌✅${NETLIFY_SITE_ID}"
+                    echo "❌✅${NETLIFY_AUTH_TOKEN}"
                         try {
                             // Déploiement sur Netlify
-                            bat """
-                                npx netlify deploy --site ${NETLIFY_SITE_ID} --auth ${NETLIFY_AUTH_TOKEN} --prod --dir build
-                            """
+                            bat "npx netlify deploy --site ${NETLIFY_SITE_ID} --auth ${NETLIFY_AUTH_TOKEN} --prod --dir build"
                             echo '✅ Production deployment successful!'
                         } catch (err) {
                             echo "❌ Production deployment failed: ${err}"
