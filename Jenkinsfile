@@ -7,6 +7,7 @@ pipeline {
         APP_NAME = 'my-react-app'
         CONTAINER_IMAGE = 'my-react-app:v1.0.0'
         EXTERNAL_PORT = '80'
+    
         INTERNAL_PORT = '3000'
     }
     stages {
