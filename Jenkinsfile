@@ -90,7 +90,7 @@ pipeline {
                     echo '🏗️ Building for production...'
                     try{
                     bat 'npm run build'
-                    bat 'ls -la build'
+                    bat 'dir build'
                     bat 'npm install netlify-cli --save-dev' 
                     bat 'npx netlify build'
                     } catch (err) {
