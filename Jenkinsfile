@@ -122,8 +122,6 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying to Netlify...'
-                    withCredentials([string(credentialsId: 'NETLIFY_SITE_ID', variable: 'SITE_ID')]) {
-                        echo "Netlify Site ID: ${SITE_ID}"
                         try {
                             // Déploiement sur Netlify
                             bat "npx netlify deploy --site ${NETLIFY_SITE_ID} --auth ${NETLIFY_AUTH_TOKEN} --prod --dir build"
