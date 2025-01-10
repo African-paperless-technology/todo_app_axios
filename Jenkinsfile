@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    tools {nodejs "node"}
     environment {
         DOCKER_IMAGE = 'my-react-app'
         DOCKER_TAG = 'v1.0.0'
