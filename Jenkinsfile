@@ -44,7 +44,7 @@ pipeline {
             }
         } 
 
-        stage('clean all containers') {
+        stage('clean all of the containers') {
             steps {
                 script {
                     bat 'docker-compose down'
