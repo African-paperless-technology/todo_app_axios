@@ -117,7 +117,6 @@ pipeline {
                 script {
                     echo '🚀 Deploying to Netlify...'
                     
-                    }
                 }
             }
         }
