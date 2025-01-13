@@ -116,7 +116,18 @@ pipeline {
             steps {
                 script {
                     echo '🚀 Deploying to Netlify...'
-                    
+                    withCredentials([
+                        string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN'),
+                        string(credentialsId: 'NETLIFY_SITE_ID', variable: 'NETLIFY_SITE_ID')
+                    ]) {
+                        try {
+                            bat "npx netlify deploy --site ${NETLIFY_SITE_ID} --auth ${NETLIFY_AUTH_TOKEN} --prod --dir build"
+                            echo '✅ Production deployment successful!'
+                        } catch (err) {
+                            echo "❌ Production deployment failed: ${err}"
+                            throw err
+                        }
+                    }
                 }
             }
         }
